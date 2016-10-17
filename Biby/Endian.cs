@@ -164,6 +164,26 @@ namespace Biby
         }
 
         /// <summary>
+        /// Copy the value to the buffer in big endian format.
+        /// </summary>
+        /// <param name="value">The value to copy.</param>
+        /// <param name="buffer">The buffer to copy into.</param>
+        /// <param name="start">The optional index to start the copy.</param>
+        public static void CopyTo(this Guid value, byte[] buffer, int start = 0)
+        {
+            Contract.Requires(buffer != null);
+            Contract.Requires(0 <= start && start + 15 < buffer.Length);
+            var tmp = value.ToByteArray();
+            var x0 = tmp.GetInt32(0);
+            var x1 = tmp.GetInt16(4);
+            var x2 = tmp.GetInt16(6);
+            Endian.Swap(x0).CopyTo(buffer, start);
+            Endian.Swap(x1).CopyTo(buffer, start + 4);
+            Endian.Swap(x2).CopyTo(buffer, start + 6);
+            Array.Copy(tmp, 8, buffer, start + 8, 8);
+        }
+
+        /// <summary>
         /// Read a value out of a buffer in big endian format.
         /// </summary>
         /// <param name="buffer">The buffer to read from.</param>
@@ -259,6 +279,22 @@ namespace Biby
             Contract.Requires(buffer != null);
             Contract.Requires(0 <= start && start + 1 < buffer.Length);
             return unchecked((short)buffer.GetUInt16(start));
+        }
+
+        /// <summary>
+        /// Read a value out of a buffer in big endian format.
+        /// </summary>
+        /// <param name="buffer">The buffer to read from.</param>
+        /// <param name="start">The optional index to start reading</param>
+        /// <returns>A value of the given type.</returns>
+        [System.Diagnostics.Contracts.Pure]
+        public static Guid GetGuid(this byte[] buffer, int start = 0)
+        {
+            Contract.Requires(buffer != null);
+            Contract.Requires(0 <= start && start + 16 < buffer.Length);
+            return new Guid(buffer.GetInt32(start), buffer.GetInt16(start + 4), buffer.GetInt16(start + 6),
+                            buffer[start +  8], buffer[start +  9], buffer[start + 10], buffer[start + 11],
+                            buffer[start + 12], buffer[start + 13], buffer[start + 14], buffer[start + 15]);
         }
 
         /// <summary>

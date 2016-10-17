@@ -30,6 +30,10 @@ namespace Tests
             var s16 = (short)23565;
             s16.CopyTo(buf, 54);
             Debug.Assert(s16 == buf.GetInt16(54));
+
+            var g = Guid.NewGuid();
+            g.CopyTo(buf, 23);
+            Debug.Assert(g == buf.GetGuid(23));
         }
 
         static void TestHighestBit()
