@@ -175,7 +175,11 @@ namespace Biby
         {
             Contract.Requires(buffer != null);
             Contract.Requires(0 <= start && start + 7 < buffer.Length);
-            return unchecked((ulong)buffer.GetInt64(start));
+            return BitConverter.IsLittleEndian
+                 ? (ulong)buffer[0 + start] << 56 | (ulong)buffer[1 + start] << 48 | (ulong)buffer[2 + start] << 40 | (ulong)buffer[3 + start] << 32 |
+                   (ulong)buffer[4 + start] << 24 | (ulong)buffer[5 + start] << 16 | (ulong)buffer[6 + start] <<  8 | (ulong)buffer[7 + start]
+                 : (ulong)buffer[0 + start]       | (ulong)buffer[1 + start] <<  8 | (ulong)buffer[2 + start] << 16 | (ulong)buffer[3 + start] << 24 |
+                   (ulong)buffer[4 + start] << 32 | (ulong)buffer[5 + start] << 40 | (ulong)buffer[6 + start] << 48 | (ulong)buffer[7 + start] << 56;
         }
 
         /// <summary>
@@ -189,14 +193,7 @@ namespace Biby
         {
             Contract.Requires(buffer != null);
             Contract.Requires(0 <= start && start + 7 < buffer.Length);
-            unchecked
-            {
-                return BitConverter.IsLittleEndian
-                     ? buffer[0 + start] << 56 | buffer[1 + start] << 48 | buffer[2 + start] << 40 | buffer[3 + start] << 32 |
-                       buffer[4 + start] << 24 | buffer[5 + start] << 16 | buffer[6 + start] <<  8 | buffer[7 + start]
-                     : buffer[0 + start]       | buffer[1 + start] <<  8 | buffer[2 + start] << 16 | buffer[3 + start] << 24 |
-                       buffer[4 + start] << 32 | buffer[5 + start] << 40 | buffer[6 + start] << 48 | buffer[7 + start] << 56;
-            }
+            return unchecked((long)buffer.GetUInt64(start));
         }
 
         /// <summary>
@@ -211,7 +208,9 @@ namespace Biby
         {
             Contract.Requires(buffer != null);
             Contract.Requires(0 <= start && start + 3 < buffer.Length);
-            return unchecked((uint)buffer.GetInt32(start));
+            return BitConverter.IsLittleEndian
+                 ? (uint)buffer[0 + start] << 24 | (uint)buffer[1 + start] << 16 | (uint)buffer[2 + start] <<  8 | (uint)buffer[3 + start]
+                 : (uint)buffer[0 + start]       | (uint)buffer[1 + start] <<  8 | (uint)buffer[2 + start] << 16 | (uint)buffer[3 + start] << 24;
         }
 
         /// <summary>
@@ -225,12 +224,7 @@ namespace Biby
         {
             Contract.Requires(buffer != null);
             Contract.Requires(0 <= start && start + 3 < buffer.Length);
-            unchecked
-            {
-                return BitConverter.IsLittleEndian
-                     ? buffer[4 + start] << 24 | buffer[5 + start] << 16 | buffer[6 + start] <<  8 | buffer[7 + start]
-                     : buffer[0 + start]       | buffer[1 + start] <<  8 | buffer[2 + start] << 16 | buffer[3 + start] << 24;
-            }
+            return unchecked((int)buffer.GetUInt32(start));
         }
 
         /// <summary>
