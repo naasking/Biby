@@ -64,8 +64,8 @@ namespace Biby
 
         static int[] deBruijinPos =
         {
-            0, 9, 1, 10, 13, 21, 2, 29, 11, 14, 16, 18, 22, 25, 3, 30,
-            8, 12, 20, 28, 15, 17, 24, 7, 19, 27, 23, 6, 26, 5, 4, 31
+            0,  9,  1, 10, 13, 21,  2, 29, 11, 14, 16, 18, 22, 25, 3, 30,
+            8, 12, 20, 28, 15, 17, 24,  7, 19, 27, 23,  6, 26,  5, 4, 31
         };
 
         /// <summary>
@@ -80,7 +80,9 @@ namespace Biby
         [CLSCompliant(false)]
         public static int Log2(this uint value)
         {
-            return deBruijinPos[(Fold(value) * 0x07C4ACDDU) >> 27];
+            var i = (Fold(value) * 0x07C4ACDDU) >> 27;
+            Contract.Assume(i < deBruijinPos.Length);
+            return deBruijinPos[i];
         }
 
         /// <summary>
