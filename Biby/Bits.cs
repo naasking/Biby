@@ -359,6 +359,50 @@ namespace Biby
         {
             return unchecked(GetHashCode((ulong)value, (ulong)scalingFactor, (ulong)additiveConstant, bitCount));
         }
+
+        /// <summary>
+        /// Computes a universal hash code.
+        /// </summary>
+        /// <param name="value">The base union value.</param>
+        /// <param name="scalingFactor">The multiplicative constant.</param>
+        /// <param name="additiveConstant">The additive constant.</param>
+        /// <param name="bitCount">The number of bits in the resulting hash.</param>
+        /// <returns>An integral universal hash code.</returns>
+        [System.Diagnostics.Contracts.Pure]
+        public static Union16 GetHashCode(this Union16 value, Union16 scalingFactor, Union16 additiveConstant, int bitCount)
+        {
+            if (bitCount > 16) throw new ArgumentOutOfRangeException("bitCount", "Must be 16 bits or less.");
+            return new Union16((ushort)((scalingFactor.Unsigned * value.Unsigned + additiveConstant.Unsigned) >> (16 - bitCount)));
+        }
+
+        /// <summary>
+        /// Computes a universal hash code.
+        /// </summary>
+        /// <param name="value">The base union value.</param>
+        /// <param name="scalingFactor">The multiplicative constant.</param>
+        /// <param name="additiveConstant">The additive constant.</param>
+        /// <param name="bitCount">The number of bits in the resulting hash.</param>
+        /// <returns>An integral universal hash code.</returns>
+        [System.Diagnostics.Contracts.Pure]
+        public static Union32 GetHashCode(this Union32 value, Union32 scalingFactor, Union32 additiveConstant, int bitCount)
+        {
+            return new Union32(value.Unsigned.GetHashCode(scalingFactor.Unsigned, additiveConstant.Unsigned, bitCount));
+        }
+
+        /// <summary>
+        /// Computes a universal hash code.
+        /// </summary>
+        /// <param name="value">The base union value.</param>
+        /// <param name="scalingFactor">The multiplicative constant.</param>
+        /// <param name="additiveConstant">The additive constant.</param>
+        /// <param name="bitCount">The number of bits in the resulting hash.</param>
+        /// <returns>An integral universal hash code.</returns>
+        [System.Diagnostics.Contracts.Pure]
+        public static Union64 GetHashCode(this Union64 value, Union64 scalingFactor, Union64 additiveConstant, int bitCount)
+        {
+            if (bitCount > 64) throw new ArgumentOutOfRangeException("bitCount", "Must be 64 bits or less.");
+            return new Union64((scalingFactor.Unsigned * value.Unsigned + additiveConstant.Unsigned) >> (64 - bitCount));
+        }
         #endregion
     }
 }

@@ -11,7 +11,7 @@ namespace Biby
     /// Represents a 16-bit union.
     /// </summary>
     [StructLayout(LayoutKind.Explicit)]
-    public struct Union16 : IEquatable<Union16>, IUniversalHash<Union16>
+    public struct Union16 : IEquatable<Union16>
     {
         /// <summary>
         /// The unsigned fragment of the union.
@@ -38,20 +38,6 @@ namespace Biby
         /// <param name="value">The unsigned value.</param>
         [CLSCompliant(false)]
         public Union16(ushort value) : this() { Unsigned = value; }
-
-        /// <summary>
-        /// Computes a universal hash code.
-        /// </summary>
-        /// <param name="scalingFactor">The multiplicative constant.</param>
-        /// <param name="additiveConstant">The additive constant.</param>
-        /// <param name="bitCount">The number of bits in the resulting hash.</param>
-        /// <returns>An integral universal hash code.</returns>
-        [System.Diagnostics.Contracts.Pure]
-        public Union16 GetHashCode(Union16 scalingFactor, Union16 additiveConstant, int bitCount)
-        {
-            if (bitCount > 16) throw new ArgumentOutOfRangeException("bitCount", "Must be 16 bits or less.");
-            return new Union16((ushort)((scalingFactor.Unsigned * Unsigned + additiveConstant.Unsigned) >> (16 - bitCount)));
-        }
 
         /// <summary>
         /// Compare for equality.
@@ -112,7 +98,7 @@ namespace Biby
     /// Represents a 32-bit union.
     /// </summary>
     [StructLayout(LayoutKind.Explicit)]
-    public struct Union32 : IEquatable<Union32>, IUniversalHash<Union32>
+    public struct Union32 : IEquatable<Union32>
     {
         /// <summary>
         /// The unsigned fragment of the union.
@@ -175,19 +161,6 @@ namespace Biby
         }
 
         /// <summary>
-        /// Computes a universal hash code.
-        /// </summary>
-        /// <param name="scalingFactor">The multiplicative constant.</param>
-        /// <param name="additiveConstant">The additive constant.</param>
-        /// <param name="bitCount">The number of bits in the resulting hash.</param>
-        /// <returns>An integral universal hash code.</returns>
-        [System.Diagnostics.Contracts.Pure]
-        public Union32 GetHashCode(Union32 scalingFactor, Union32 additiveConstant, int bitCount)
-        {
-            return new Union32(Unsigned.GetHashCode(scalingFactor.Unsigned, additiveConstant.Unsigned, bitCount));
-        }
-
-        /// <summary>
         /// Compute a hash code.
         /// </summary>
         /// <returns>The hash code for this value.</returns>
@@ -224,7 +197,7 @@ namespace Biby
     /// Represents a 64-bit union.
     /// </summary>
     [StructLayout(LayoutKind.Explicit)]
-    public struct Union64 : IEquatable<Union64>, IUniversalHash<Union64>
+    public struct Union64 : IEquatable<Union64>
     {
         /// <summary>
         /// The unsigned fragment of the union.
@@ -263,20 +236,6 @@ namespace Biby
         /// </summary>
         /// <param name="value">The double-precision floating point value.</param>
         public Union64(double value) : this() { Double = value; }
-
-        /// <summary>
-        /// Computes a universal hash code.
-        /// </summary>
-        /// <param name="scalingFactor">The multiplicative constant.</param>
-        /// <param name="additiveConstant">The additive constant.</param>
-        /// <param name="bitCount">The number of bits in the resulting hash.</param>
-        /// <returns>An integral universal hash code.</returns>
-        [System.Diagnostics.Contracts.Pure]
-        public Union64 GetHashCode(Union64 scalingFactor, Union64 additiveConstant, int bitCount)
-        {
-            if (bitCount > 64) throw new ArgumentOutOfRangeException("bitCount", "Must be 64 bits or less.");
-            return new Union64((scalingFactor.Unsigned * Unsigned + additiveConstant.Unsigned) >> (64 - bitCount));
-        }
 
         /// <summary>
         /// Compare for equality.
